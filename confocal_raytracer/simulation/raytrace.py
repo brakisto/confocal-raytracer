@@ -1,8 +1,8 @@
 from scipy.optimize import fsolve
 import numpy as np
 import pandas as pd
-from aspheric import AsphericLens
-from ray import Ray
+from confocal_raytracer.simulation.aspheric import AsphericLens
+from confocal_raytracer.simulation.ray import Ray
 import cProfile as profile
 
 

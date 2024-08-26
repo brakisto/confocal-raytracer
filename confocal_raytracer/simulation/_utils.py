@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from aspheric import AsphericLens
+from confocal_raytracer.simulation.aspheric import AsphericLens
 import matplotlib
 
 
