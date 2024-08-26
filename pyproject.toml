@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "confocal-raytracer"
-version = "0.1.2"
+version = "0.1.29"
 description = "Raytrace module"
 authors = ["Kiril Ivanov Kurtev"]
 readme = "README.md"
