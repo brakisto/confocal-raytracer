@@ -2,9 +2,17 @@
 
 Specialized ray tracing engine designed for simulating and optimizing chromatic confocal sensors. This repository provides a powerful toolset for researchers and engineers working on precise optical measurement systems, enabling the accurate modeling of light interactions within chromatic confocal setups.
 
+## Installation
+
+The library can be simply installed by:
+
+```
+pip install confocal-raytracer
+```
+
 ## Defining the setup
 
-The optical setup is defined inside the setup.py file. If, for example, an achromatic doublet is defined each face of both lenses should be defined as follows:
+The optical setup is defined inside a JSON-like file. If, for example, an achromatic doublet is defined each face of both lenses should be defined as follows:
 
 ```
 doublet = {
@@ -81,7 +89,7 @@ doublet = {
 
 ## Lens materials
 
-The materials available with their refractive indexes should be specified in a CSV file in the *data* folder as follows:
+The materials available with their refractive indexes should be specified in a Pandas Data Frame. The custom spectrum intensity can also be specified in the same Data Frame as follows:
 
 |wl_nm|intensity                    |n_BK7 |n_SF2                                        |n_SF5             |n_BAF10           |n_SF10            |n_BAK4            |n_SF57            |
 |-----|-----------------------------|------|---------------------------------------------|------------------|------------------|------------------|------------------|------------------|
@@ -104,21 +112,41 @@ import matplotlib.pyplot as plt
 import time
 import warnings
 
+
+
+# Ignore warning in axins legend location.
 warnings.filterwarnings("ignore")
+
+# Set refractive index of the spatial filter
 n_data["n_absorb"] = np.inf
+
+# Decimate the refractive index data to make
+# the plot faster
 n_data = n_data[::5]
 
+# Get example optical data
 optical_data = chromatic_confocal
+
+# Set the pinhole size before sensor
 PINHOLE_SIZE = 25 / 1000  # milimeters
+
+# Number of rays from light source
 N_RAYS = 3
+# Set the extension of the light source
 LIGHT_SOURCE_RADIUS = 0 / 1000  # milimeters
+# Set the desviation angle with respecto to the 
+# optical axis of the N_RAYS
 THETA = 6.0  # Degrees
+# If LIGHT_SOURCE_RADIUS != 0 it is possible to set
+# more rays for each height with the same desviation angle
 N_RAYS_HEIGHT = 1
+# Light source position
 Z0 = -33.4  # Light source position same as
 # back focal length of the achormatic doublet
 
 fig, ax = plt.subplots()
 
+# RayTrace object
 raytrace = RayTrace(
     optical_data=optical_data,
     n_data=n_data,
@@ -130,6 +158,10 @@ raytrace = RayTrace(
 )
 
 t0 = time.perf_counter()
+# After intersecting the full system, 
+# frays will have the shape (len(n_data), N_RAYS_HEIGHT, N_RAYS)
+# where each one of the rays will be a Ray object with all the
+# parameters included in it such as: angle of incidence and path followed by the ray
 frays = raytrace.intersect_full_system()
 print("Elapsed time (s): ", time.perf_counter() - t0)
 

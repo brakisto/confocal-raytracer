@@ -50,14 +50,18 @@ class RayTrace:
         n_rays: int,
         theta: int,
         z0: float,
-        n_rays_height: int
+        n_rays_height: int,
     ):
 
         self.optical_data = optical_data
         self.n_data = n_data
-        self.light_source = np.linspace(-light_source_radius,
-                                        light_source_radius, n_rays_height) \
-            if light_source_radius != 0 else np.zeros(1)
+        self.light_source = (
+            np.linspace(
+                -light_source_radius, light_source_radius, n_rays_height
+            )
+            if light_source_radius != 0
+            else np.zeros(1)
+        )
         self.thetas = (
             np.deg2rad(np.linspace(-theta, theta, n_rays))
             if theta != 0
@@ -132,10 +136,9 @@ class RayTrace:
             (len(self.n_data), len(self.light_source), len(self.thetas)),
             dtype=object,
         )
+
         print(
-            f"Total number of rays is {len(self.n_data) *
-                                       len(self.light_source) *
-                                       len(self.thetas)}"
+            f"Total number of rays is {len(self.n_data) * len(self.light_source) * len(self.thetas)}"
         )
 
         # Go trough all wavelengths
